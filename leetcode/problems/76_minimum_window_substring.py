@@ -13,7 +13,7 @@ class Solution:
             if ch not in target_dict:
                 target_dict[ch] = 0
             target_dict[ch] += 1
-        
+
         i, j = 0, 0
         while j < len(s):
             if s[j] not in cur_dict:
@@ -23,10 +23,10 @@ class Solution:
             while is_valid(cur_dict, target_dict):
                 if not ans or j+1-i < len(ans):
                     ans = s[i:j+1]
-                
+
                 cur_dict[s[i]] -= 1
                 i += 1
-            
+
             j += 1
-        
+
         return ans

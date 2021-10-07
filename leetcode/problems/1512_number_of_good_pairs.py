@@ -12,4 +12,3 @@ class Solution:
         for num, count in num_counts.items():
             ans += count*(count-1)//2
         return ans
-        
