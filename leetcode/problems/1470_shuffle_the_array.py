@@ -1,0 +1,10 @@
+from typing import List
+
+
+class Solution:
+    def shuffle(self, nums: List[int], n: int) -> List[int]:
+        ans = [0 for _ in range(2 * n)]
+        for i in range(n):
+            ans[2 * i] = nums[i]
+            ans[2 * i + 1] = nums[n + i]
+        return ans
