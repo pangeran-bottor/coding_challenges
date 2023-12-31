@@ -3,31 +3,27 @@ from typing import List
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        partitions = set()
-        seq = []
-        n = len(s)
-
-        def is_palindrome_partition(p):
-            for el in p:
-                el_len = len(el)
-                for i in range(el_len // 2):
-                    if el[i] != el[el_len - i - 1]:
+        def is_palindrome_partition(partition):
+            for s in partition:
+                for i in range(len(s) // 2):
+                    if s[i] != s[len(s) - i - 1]:
                         return False
             return True
 
-        def backtrack(idx):
-            if idx >= n:
-                if is_palindrome_partition(seq):
-                    partitions.add(tuple(seq))
+        def generate(start, cur):
+            if start == n and is_palindrome_partition(cur):
+                cur = ["".join(p) for p in cur]
+                ans.append(list(cur))
                 return
 
-            seq.append(s[idx])
-            backtrack(idx + 1)
-            seq.pop()
+            for i in range(start, n):
+                cur.append(s[start : i + 1])
+                generate(i + 1, cur)
+                cur.pop()
 
-            if seq:
-                seq[-1] = seq[-1] + s[idx]
-                backtrack(idx + 1)
+        s = list(s)
+        n = len(s)
+        ans = []
+        generate(0, [])
 
-        backtrack(0)
-        return list(partitions)
+        return ans
