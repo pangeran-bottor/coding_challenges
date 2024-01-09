@@ -11,21 +11,11 @@ class TreeNode:
 
 class Solution:
     def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
-        def get_leaves(root):
-            leaves = []
-            stack = [root]
+        def leaves(root):
+            if not root:
+                return []
+            if not root.left and not root.right:
+                return [root.val]
+            return leaves(root.left) + leaves(root.right)
 
-            while stack:
-                cur = stack.pop()
-                if cur.right:
-                    stack.append(cur.right)
-                if cur.left:
-                    stack.append(cur.left)
-
-                if not cur.left and not cur.right:
-                    leaves.append(cur.val)
-            return leaves
-
-        leaves1 = get_leaves(root1)
-        leaves2 = get_leaves(root2)
-        return leaves1 == leaves2
+        return leaves(root1) == leaves(root2)
