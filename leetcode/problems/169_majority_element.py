@@ -1,18 +1,16 @@
-from collections import Counter
 from typing import List
 
 
 class Solution:
     def majorityElement(self, nums: List[int]) -> int:
-        counts = Counter()
-        
-        n = len(nums)
-        result = nums[0]
+        count = 0
+        ans = None
         for num in nums:
-            counts[num] += 1
-
-            if counts[num] > n//2:
-                result = num
-                break
-        
-        return result
+            if count == 0:
+                ans = num
+                count = 1
+            elif num == ans:
+                count += 1
+            else:
+                count -= 1
+        return ans
