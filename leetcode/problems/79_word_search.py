@@ -3,50 +3,41 @@ from typing import List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        def is_possible(word, board):
-            ch_counter = {}
-            for ch in word:
-                if ch not in ch_counter:
-                    ch_counter[ch] = 0
-                ch_counter[ch] += 1
-            
-            for row in board:
-                for el in row:
-                    if el in ch_counter:
-                        ch_counter[el] -= 1
-            
-            for ch, count in ch_counter.items():
-                if count > 0:
-                    return False
-            return True
-        
-        def dfs(board, word, i, j):
-            if not word:
+        def backtrack(curr_word: str, row: int, col: int):
+            if len(curr_word) == 0:
                 return True
-            if i < 0 or i >= len(board):
+
+            if row < 0 or row >= R or col < 0 or col >= C:
                 return False
-            if j < 0 or j >= len(board[0]):
+
+            if curr_word[0] != board[row][col]:
                 return False
-            
-            if board[i][j] != word[0]:
-                return False
-            
-            tmp = board[i][j]
-            board[i][j] = "#"
-            for r, c in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
-                result = dfs(board, word[1:], i+r, j+c)
-                if result:
+
+            temp = board[row][col]
+            board[row][col] = "#"
+
+            for dr, dc in [[-1, 0], [1, 0], [0, 1], [0, -1]]:
+                nrow, ncol = row + dr, col + dc
+                if backtrack(curr_word=curr_word[1:], row=nrow, col=ncol):
                     return True
-            board[i][j] = tmp
+
+            board[row][col] = temp
             return False
-        
-        if not is_possible(word, board):
-            return False
-        
+
         R, C = len(board), len(board[0])
         for i in range(R):
             for j in range(C):
-                result = dfs(board, word, i, j)
-                if result:
+                ret = backtrack(word, i, j)
+                if ret:
                     return True
         return False
+
+
+if __name__ == "__main__":
+    board = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]
+    word = "ABCCED"
+    # board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+    # word = "SEE"
+    # board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+    # word = "ABCB"
+    print(Solution().exist(board=board, word=word))
