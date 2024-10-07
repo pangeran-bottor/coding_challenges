@@ -3,7 +3,7 @@ from typing import List
 
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        mapper = {
+        mapping = {
             "2": "abc",
             "3": "def",
             "4": "ghi",
@@ -14,20 +14,24 @@ class Solution:
             "9": "wxyz",
         }
 
-        ans = []
-
-        n = len(digits)
-
-        def backtrack(idx, seq):
-            if len(seq) == n:
-                if n > 0:
-                    ans.append("".join(seq))
+        def _generate(curr_idx: int, curr_s: str):
+            if curr_s and len(curr_s) == n:
+                ans.append(curr_s)
                 return
 
-            for ch in mapper[digits[idx]]:
-                seq.append(ch)
-                backtrack(idx + 1, seq)
-                seq.pop()
+            for idx in range(curr_idx, n):
+                for ch in mapping[digits[idx]]:
+                    curr_s += ch
+                    _generate(curr_idx=idx + 1, curr_s=curr_s)
+                    curr_s = curr_s[:-1]
 
-        backtrack(0, [])
+        ans: List[str] = []
+        n = len(digits)
+        _generate(0, "")
         return ans
+
+
+if __name__ == "__main__":
+    digits = ""
+    for c in Solution().letterCombinations(digits=digits):
+        print(c)
