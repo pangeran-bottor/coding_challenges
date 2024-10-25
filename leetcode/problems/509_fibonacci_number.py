@@ -1,13 +1,12 @@
 class Solution:
     def fib(self, n: int) -> int:
-        cache = {0: 0, 1: 1}
-        
-        def recur_fib(num):
-            if num in cache:
-                return cache[num]
+        if n < 2:
+            return n
 
-            res = recur_fib(num-1) + recur_fib(num-2)
-            cache[num] = res
-            return res
+        f0 = 0
+        f1 = 1
 
-        return recur_fib(n)
+        for _ in range(2, n + 1):
+            f0, f1 = f1, f0 + f1
+
+        return f1
