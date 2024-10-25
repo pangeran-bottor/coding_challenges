@@ -1,10 +1,11 @@
-from functools import cache
-
-
 class Solution:
-    @cache
-    def climbStairs(self, n: int) -> int:        
-        if n <= 2:
+    def climbStairs(self, n: int) -> int:
+        if n < 2:
             return n
-        
-        return self.climbStairs(n-2) + self.climbStairs(n-1)
+
+        f0 = 1
+        f1 = 2
+        for _ in range(3, n + 1):
+            f0, f1 = f1, f0 + f1
+
+        return f1
