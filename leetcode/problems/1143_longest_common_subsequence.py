@@ -1,8 +1,13 @@
 class Solution:
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        n1, n2 = len(text1), len(text2)
-        dp = [[0 for _ in range(n1+1)] for _ in range(n2+1)]
-        for i in range(1, n2+1):
-            for j in range(1, n1+1):
-                dp[i][j] = max(dp[i-1][j-1] + (text2[i-1] == text1[j-1]), dp[i-1][j], dp[i][j-1]) 
-        return dp[-1][-1]
+        m, n = len(text1), len(text2)
+        dp = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+
+        for row in range(1, m + 1):
+            for col in range(1, n + 1):
+                if text1[row - 1] == text2[col - 1]:
+                    dp[row][col] = dp[row - 1][col - 1] + 1
+                else:
+                    dp[row][col] = max(dp[row - 1][col], dp[row][col - 1])
+
+        return dp[m][n]
