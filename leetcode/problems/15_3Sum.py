@@ -3,20 +3,27 @@ from typing import List
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        ans = set()
-        dups = set()
+        nums.sort()
 
-        for i, val1 in enumerate(nums):
-            if val1 in dups:
+        n = len(nums)
+        ans = []
+        for idx, num in enumerate(nums):
+            if num > 0:
+                break
+            if idx > 0 and num == nums[idx - 1]:
                 continue
-            dups.add(val1)
 
-            seen = set()
-            for j, val2 in enumerate(nums[i + 1 :]):
-                target = -(val1 + val2)
-                if target in seen:
-                    ans.add(tuple(sorted((val1, val2, target))))
-
-                seen.add(val2)
-
-        return list(ans)
+            left, right = idx + 1, n - 1
+            while left < right:
+                curr_sum = num + nums[left] + nums[right]
+                if curr_sum == 0:
+                    ans.append([num, nums[left], nums[right]])
+                    left += 1
+                    right -= 1
+                    while nums[left] == nums[left - 1] and left < right:
+                        left += 1
+                elif curr_sum > 0:
+                    right -= 1
+                else:
+                    left += 1
+        return ans
