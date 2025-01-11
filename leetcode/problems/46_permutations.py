@@ -3,19 +3,18 @@ from typing import List
 
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        def generate(prev):
-            if len(prev) == n:
-                ans.append(list(prev))
+        def _backtrack(ans, visited, curr):
+            if len(curr) == len(nums):
+                ans.append(curr)
                 return
-
-            for i in range(n):
-                if nums[i] in prev:
+            for idx in range(len(nums)):
+                if idx in visited:
                     continue
-                prev.append(nums[i])
-                generate(prev)
-                prev.pop()
+                visited.add(idx)
+                _backtrack(ans, visited, curr + [nums[idx]])
+                visited.remove(idx)
 
-        n = len(nums)
+        visited = set()
         ans = []
-        generate([])
+        _backtrack(ans, visited, [])
         return ans
