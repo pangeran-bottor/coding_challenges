@@ -1,43 +1,34 @@
 from typing import List
 
 
+class UnionFind:
+    def __init__(self, N):
+        self.representative = [i for i in range(N + 1)]
+        self.size = [1 for _ in range(N + 1)]
+
+    def find(self, node):
+        if self.representative[node] == node:
+            return node
+        self.representative[node] = self.find(self.representative[node])
+        return self.representative[node]
+
+    def union(self, node1, node2):
+        rep_node1 = self.find(node1)
+        rep_node2 = self.find(node2)
+        if rep_node1 == rep_node2:
+            return False
+
+        if self.size[rep_node1] < self.size[rep_node2]:
+            rep_node1, rep_node2 = rep_node2, rep_node1
+        self.representative[rep_node2] = rep_node1
+        self.size[rep_node1] += self.size[rep_node2]
+        return True
+
+
 class Solution:
-    cycle_start = -1
-
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        def _dfs(node):
-            visited.add(node)
-
-            for next_node in adj.get(node, []):
-                if next_node not in visited:
-                    parent[next_node] = node
-                    _dfs(next_node)
-                elif self.cycle_start == -1 and parent[node] != next_node:
-                    parent[next_node] = node
-                    self.cycle_start = next_node
-
-        adj: dict = {}
-        for a, b in edges:
-            adj[a] = adj.get(a, []) + [b]
-            adj[b] = adj.get(b, []) + [a]
-
-        n = len(adj)
-        parent = [-1 for _ in range(n + 1)]
-        visited: set = set()
-
-        self.cycle_start = -1
-        _dfs(1)
-
-        cycle_nodes = set()
-        node = self.cycle_start
-        while True:
-            cycle_nodes.add(node)
-            node = parent[node]
-            if node == self.cycle_start:
-                break
-
-        for a, b in edges[::-1]:
-            if a in cycle_nodes and b in cycle_nodes:
-                return [a, b]
-
+        union_find = UnionFind(len(edges) + 1)
+        for node1, node2 in edges:
+            if not union_find.union(node1, node2):
+                return [node1, node2]
         return []
