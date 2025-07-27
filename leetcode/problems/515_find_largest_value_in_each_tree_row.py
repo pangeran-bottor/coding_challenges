@@ -1,3 +1,4 @@
+from collections import deque
 from typing import List, Optional
 
 
@@ -11,17 +12,18 @@ class TreeNode:
 class Solution:
     def largestValues(self, root: Optional[TreeNode]) -> List[int]:
         ans = []
+        queue = deque([(root, 1)])
+        while queue:
+            curr_node, level = queue.popleft()
+            if not curr_node:
+                continue
+            if level > len(ans):
+                ans.append(curr_node.val)
+            else:
+                ans[level - 1] = max(curr_node.val, ans[level - 1])
 
-        rows = [root] if root else []
-
-        while rows:
-            ans.append(max([node.val for node in rows if node]))
-            next_rows = []
-            for node in rows:
-                if node.left:
-                    next_rows.append(node.left)
-                if node.right:
-                    next_rows.append(node.right)
-            rows = next_rows
-
+            if curr_node.left:
+                queue.append((curr_node.left, level + 1))
+            if curr_node.right:
+                queue.append((curr_node.right, level + 1))
         return ans
