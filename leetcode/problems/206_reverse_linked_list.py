@@ -10,10 +10,11 @@ class ListNode:
 
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        if not head or not head.next:
-            return head
+        prev, pointer = None, head
 
-        tail = self.reverseList(head.next)
-        head.next.next = head
-        head.next = None
-        return tail
+        while pointer:
+            next_node = pointer.next
+            pointer.next = prev
+            prev = pointer
+            pointer = next_node
+        return prev
